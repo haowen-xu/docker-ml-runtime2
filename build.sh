@@ -20,7 +20,7 @@ CPU_BASE_IMAGE="ubuntu:${UBUNTU_VERSION}"
 VARIANT="$1"
 
 if [[ "${VARIANT}" != "cpu" && "${VARIANT}" != "gpu" ]]; then
-    echo build.sh cpu|gpu
+    echo build.sh "cpu|gpu"
     exit 1
 fi
 
@@ -38,12 +38,13 @@ SHORT_TAG="${VARIANT}"
 FULL_TAG="${VARIANT}-ubuntu${UBUNTU_VERSION}-cuda${CUDA_VERSION}-torch${TORCH_VERSION}"
 
 # ---- build the docker image ----
+DOCKER="${DOCKER:-}"
 WORK_DIR=./"${VARIANT}"
 mkdir -p "${WORK_DIR}" && cd "${WORK_DIR}" && \
     echo "FROM ${BASE_IMAGE}" > Dockerfile && \
     cat ../template/Dockerfile >> Dockerfile && \
     cp ../entry.sh entry.sh && \
-    docker build -t "${IMAGE_NAME}:${FULL_TAG}" \
+    ${DOCKER} build -t "${IMAGE_NAME}:${FULL_TAG}" \
             --build-arg VARIANT="${VARIANT}" \
             --build-arg GPU_LIB_PATH="${GPU_LIB_PATH}" \
             --build-arg TORCH_VERSION="${TORCH_VERSION}" \
@@ -53,7 +54,7 @@ mkdir -p "${WORK_DIR}" && cd "${WORK_DIR}" && \
             --build-arg PIP_MIRROR="${PIP_MIRROR}" \
             . \
         && \
-        docker tag "${IMAGE_NAME}:${FULL_TAG}" "haowenxu/${IMAGE_NAME}:${FULL_TAG}" && \
-        docker tag "${IMAGE_NAME}:${FULL_TAG}" "haowenxu/${IMAGE_NAME}:${SHORT_TAG}" && \
-        docker push "haowenxu/${IMAGE_NAME}:${FULL_TAG}" && \
-        docker push "haowenxu/${IMAGE_NAME}:${SHORT_TAG}"
+        ${DOCKER} tag "${IMAGE_NAME}:${FULL_TAG}" "haowenxu/${IMAGE_NAME}:${FULL_TAG}" && \
+        ${DOCKER} tag "${IMAGE_NAME}:${FULL_TAG}" "haowenxu/${IMAGE_NAME}:${SHORT_TAG}" && \
+        ${DOCKER} push "haowenxu/${IMAGE_NAME}:${FULL_TAG}" && \
+        ${DOCKER} push "haowenxu/${IMAGE_NAME}:${SHORT_TAG}"

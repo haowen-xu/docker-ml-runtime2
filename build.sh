@@ -4,25 +4,39 @@
 IMAGE_NAME="ml-runtime2"
 REPO_NAME="haowenxu"
 
-UBUNTU_VERSION=18.04
-CUDA_VERSION=10.0-cudnn7
-TORCH_VERSION=1.3.1
-TORCH_VISION_VERSION=0.4.2
-TENSORFLOW_VERSION=2.1.0
+PYTHON_VERSION="${PYTHON_VERSION:-3.6}"
+CUDA_VERSION="${CUDA_VERSION:-10.0-cudnn7}"
+TORCH_VERSION="${TORCH_VERSION:-1.3.1}"
+TORCH_VISION_VERSION="${TORCH_VISION_VERSION:-0.4.2}"
+TENSORFLOW_VERSION="${TENSORFLOW_VERSION:-2.1.0}"
 
 PIP_DEFAULT_TIMEOUT="${PIP_DEFAULT_TIMEOUT:-120}"
 PIP_MIRROR="${PIP_MIRROR:-}"
 
-GPU_BASE_IMAGE="nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}"
-CPU_BASE_IMAGE="ubuntu:${UBUNTU_VERSION}"
-
 # ---- recognize the variant ----
-VARIANT="$1"
+VARIANT="${VARIANT:-cpu}"
 
 if [[ "${VARIANT}" != "cpu" && "${VARIANT}" != "gpu" ]]; then
-    echo build.sh "cpu|gpu"
+    echo "Variant ${VARIANT} is not supported."
     exit 1
 fi
+
+if [[ "${PYTHON_VERSION}" == "3.6" ]]; then
+    UBUNTU_VERSION=18.04
+elif [[ "${PYTHON_VERSION}" == "3.7" ]]; then
+    UBUNTU_VERSION=19.04
+else
+    echo "Python ${PYTHON_VERSION} is not supported."
+    exit 1
+fi
+
+if [[ "${VARIANT}" == "gpu" && "${UBUNTU_VERSION}" != "18.04" ]]; then
+    echo "The combination of ubuntu ${UBUNTU_VERSION} and variant ${VARIANT} is not supported."
+    exit 1
+fi
+
+GPU_BASE_IMAGE="nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}"
+CPU_BASE_IMAGE="ubuntu:${UBUNTU_VERSION}"
 
 # ---- config according to the variant ----
 if [ "${VARIANT}" == "gpu" ]; then
@@ -34,8 +48,13 @@ else
 fi
 
 # ---- determine the docker tags ----
-SHORT_TAG="${VARIANT}"
-FULL_TAG="${VARIANT}-ubuntu${UBUNTU_VERSION}-cuda${CUDA_VERSION}-torch${TORCH_VERSION}"
+SHORT_TAG="${VARIANT}-py${PYTHON_VERSION}"
+if [[ "${VARIANT}" == "gpu" ]]; then
+    GPU_TAG="-cuda${CUDA_VERSION}"
+else
+    GPU_TAG=""
+fi
+FULL_TAG="${VARIANT}${GPU_TAG}-py${PYTHON_VERSION}-torch${TORCH_VERSION}"
 
 # ---- build the docker image ----
 DOCKER="${DOCKER:-}"

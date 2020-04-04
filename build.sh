@@ -58,7 +58,7 @@ FULL_TAG="${VARIANT}${GPU_TAG}-py${PYTHON_VERSION}-torch${TORCH_VERSION}"
 
 # ---- build the docker image ----
 DOCKER="${DOCKER:-}"
-WORK_DIR=./"${VARIANT}"
+WORK_DIR=./"${VARIANT}-py${PYTHON_VERSION}"
 mkdir -p "${WORK_DIR}" && cd "${WORK_DIR}" && \
     echo "FROM ${BASE_IMAGE}" > Dockerfile && \
     cat ../template/Dockerfile >> Dockerfile && \

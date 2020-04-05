@@ -34,7 +34,9 @@ RUN chsh -s /bin/bash && \
     rm -rf /var/lib/apt/lists/*
 
 # Install graph-tool
-RUN echo "deb http://downloads.skewed.de/apt bionic main" >> /etc/apt/sources.list && \
+RUN DISTRO=$(cat /etc/lsb-release | grep DISTRIB_CODENAME | cut -f2 -d'=') \
+    echo "Ubuntu distro is: ${DISTRO}" |
+    echo "deb http://downloads.skewed.de/apt ${DISTRO} main" >> /etc/apt/sources.list && \
     DEBIAN_FRONTEND=noninteractive apt-key adv --keyserver keys.openpgp.org --recv-key 612DEFB798507F25 && \
     DEBIAN_FRONTEND=noninteractive apt-get update -y && \
     apt-get install -y python3-graph-tool && \

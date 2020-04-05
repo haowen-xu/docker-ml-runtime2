@@ -8,10 +8,13 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        variant: [cpu, gpu]
-        python-version: [3.6, 3.7]
-      exclude:
-        - {variant: gpu, python-version: 3.7}
+        include:
+          - variant: cpu
+            python-version: 3.6
+          - variant: cpu
+            python-version: 3.7
+          - variant: gpu
+            python-version: 3.6
 
     steps:
       - uses: actions/checkout@v2

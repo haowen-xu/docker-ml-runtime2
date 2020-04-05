@@ -1,0 +1,28 @@
+name: unittest
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        variant: [cpu, gpu]
+        python-version: [3.6, 3.7]
+      exclude:
+        - {variant: gpu, python-version: 3.7}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to the docker hub
+        run: |
+          docker login -u "${{ secrets.docker_user }}" -p "${{ secrets.docker_password }}"
+
+      - name: Build the docker file
+        run: |
+          export DOCKER="sudo docker"
+          export VARIANT="${{ matrix.variant }}"
+          export PYTHON_VERSION="${{ matrix.python_version }}"
+          ./build.sh

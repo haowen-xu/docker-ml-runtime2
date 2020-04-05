@@ -62,7 +62,7 @@ WORK_DIR=./"${VARIANT}-py${PYTHON_VERSION}"
 mkdir -p "${WORK_DIR}" && cd "${WORK_DIR}" && \
     echo "FROM ${BASE_IMAGE}" > Dockerfile && \
     cat ../template/Dockerfile >> Dockerfile && \
-    cp ../entry.sh entry.sh && \
+    cp ../template/entry.sh entry.sh && \
     ${DOCKER} build -t "${IMAGE_NAME}:${FULL_TAG}" \
             --build-arg VARIANT="${VARIANT}" \
             --build-arg GPU_LIB_PATH="${GPU_LIB_PATH}" \

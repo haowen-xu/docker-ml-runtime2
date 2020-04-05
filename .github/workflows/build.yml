@@ -27,5 +27,5 @@ jobs:
         run: |
           export DOCKER="sudo docker"
           export VARIANT="${{ matrix.variant }}"
-          export PYTHON_VERSION="${{ matrix.python_version }}"
+          export PYTHON_VERSION="${{ matrix.python-version }}"
           ./build.sh

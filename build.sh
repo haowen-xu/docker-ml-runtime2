@@ -57,6 +57,8 @@ fi
 FULL_TAG="${VARIANT}${GPU_TAG}-py${PYTHON_VERSION}-torch${TORCH_VERSION}"
 
 # ---- build the docker image ----
+echo "Build ${FULL_TAG}"
+
 DOCKER="${DOCKER:-}"
 WORK_DIR=./"${VARIANT}-py${PYTHON_VERSION}"
 mkdir -p "${WORK_DIR}" && cd "${WORK_DIR}" && \

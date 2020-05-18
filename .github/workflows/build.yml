@@ -1,6 +1,11 @@
 name: unittest
 
-on: [push]
+on: 
+  push:
+    branches:
+      - master
+  repository_dispatch:
+    types: [build-images]
 
 jobs:
   build:

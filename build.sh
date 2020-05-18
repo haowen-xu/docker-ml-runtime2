@@ -23,8 +23,8 @@ fi
 
 if [[ "${PYTHON_VERSION}" == "3.6" ]]; then
     UBUNTU_VERSION=18.04
-elif [[ "${PYTHON_VERSION}" == "3.7" ]]; then
-    UBUNTU_VERSION=19.04
+elif [[ "${PYTHON_VERSION}" == "3.8" ]]; then
+    UBUNTU_VERSION=20.04
 else
     echo "Python ${PYTHON_VERSION} is not supported."
     exit 1

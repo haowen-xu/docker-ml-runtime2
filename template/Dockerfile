@@ -55,13 +55,13 @@ RUN ln -s /usr/bin/python3 /usr/local/bin/python && \
         numpy scipy sympy pandas tables scikit-learn matplotlib 'ipython[all]' tqdm \
         seaborn pillow imageio PyYAML sqlalchemy pymongo jinja2 scikit-image scipy progressbar2 mock pep8 coverage \
         mako Flask GitPython tinydb tinydb-serialization hashfs fs opencv-python lmdb gunicorn \
-        bokeh dask distributed joblib \
+        bokeh dask distributed joblib tensorboardX \
     && \
     python -m pip install --no-cache-dir \
         "tensorflow==${TENSORFLOW_VERSION}" keras \
     && \
     python -m pip install --no-cache-dir \
-        "torch==${TORCH_VERSION}" "torchvision==${TORCH_VISION_VERSION}" tensorboardX \
+        "torch==${TORCH_VERSION}" "torchvision==${TORCH_VISION_VERSION}" -f https://download.pytorch.org/whl/torch_stable.html \
     && \
     rm -rf /root/.cache
 

@@ -7,8 +7,9 @@ REPO_NAME="haowenxu"
 PYTHON_VERSION="${PYTHON_VERSION:-3.6}"
 CUDA_VERSION="${CUDA_VERSION:-10.1-cudnn7}"
 TENSORFLOW_VERSION="${TENSORFLOW_VERSION:-2.2.0}"
-TORCH_VERSION="${TORCH_VERSION:-1.5.0+cu101}"
-TORCH_VISION_VERSION="${TORCH_VISION_VERSION:-0.6.0+cu101}"
+TORCH_VERSION="${TORCH_VERSION:-1.5.0}"
+TORCH_VISION_VERSION="${TORCH_VISION_VERSION:-0.6.0}"
+TORCH_CUDA_CHANNEL="${TORCH_CHANNEL:-+cu101}"
 
 PIP_DEFAULT_TIMEOUT="${PIP_DEFAULT_TIMEOUT:-120}"
 PIP_MIRROR="${PIP_MIRROR:-}"
@@ -42,9 +43,11 @@ CPU_BASE_IMAGE="ubuntu:${UBUNTU_VERSION}"
 if [ "${VARIANT}" == "gpu" ]; then
     GPU_LIB_PATH="/usr/local/nvidia/lib64:/usr/local/nvidia/lib:/usr/local/cuda/lib64:/usr/local/cuda/lib"
     BASE_IMAGE="${GPU_BASE_IMAGE}"
+    TORCH_CHANNEL="${TORCH_CUDA_CHANNEL}"
 else
     GPU_LIB_PATH=""
     BASE_IMAGE="${CPU_BASE_IMAGE}"
+    TORCH_CHANNEL=""
 fi
 
 # ---- determine the docker tags ----
@@ -68,8 +71,8 @@ mkdir -p "${WORK_DIR}" && cd "${WORK_DIR}" && \
     ${DOCKER} build -t "${IMAGE_NAME}:${FULL_TAG}" \
             --build-arg VARIANT="${VARIANT}" \
             --build-arg GPU_LIB_PATH="${GPU_LIB_PATH}" \
-            --build-arg TORCH_VERSION="${TORCH_VERSION}" \
-            --build-arg TORCH_VISION_VERSION="${TORCH_VISION_VERSION}" \
+            --build-arg TORCH_VERSION="${TORCH_VERSION}${TORCH_CHANNEL}" \
+            --build-arg TORCH_VISION_VERSION="${TORCH_VISION_VERSION}${TORCH_CHANNEL}" \
             --build-arg TENSORFLOW_VERSION="${TENSORFLOW_VERSION}" \
             --build-arg PIP_DEFAULT_TIMEOUT="${PIP_DEFAULT_TIMEOUT}" \
             --build-arg PIP_MIRROR="${PIP_MIRROR}" \

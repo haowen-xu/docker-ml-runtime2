@@ -31,7 +31,7 @@ else
     exit 1
 fi
 
-if [[ "${VARIANT}" == "gpu" && "${UBUNTU_VERSION}" != "18.04" ]]; then
+if [[ "${VARIANT}" == "gpu" && "${UBUNTU_VERSION}" != "20.04" ]]; then
     echo "The combination of ubuntu ${UBUNTU_VERSION} and variant ${VARIANT} is not supported."
     exit 1
 fi

@@ -3,7 +3,6 @@ MAINTAINER Haowen Xu <haowen.xu@outlook.com>
 ARG VARIANT=
 ARG GPU_LIB_PATH=
 ARG TORCH_VERSION=
-ARG TORCH_VISION_VERSION=
 ARG TENSORFLOW_VERSION=
 ARG PIP_DEFAULT_TIMEOUT=120
 ARG PIP_MIRROR=
@@ -61,7 +60,7 @@ RUN ln -s /usr/bin/python3 /usr/local/bin/python && \
         "tensorflow==${TENSORFLOW_VERSION}" keras \
     && \
     python -m pip install --no-cache-dir \
-        "torch==${TORCH_VERSION}" "torchvision==${TORCH_VISION_VERSION}" -f https://download.pytorch.org/whl/torch_stable.html \
+        "torch==${TORCH_VERSION}" -f https://download.pytorch.org/whl/torch_stable.html \
     && \
     rm -rf /root/.cache
 

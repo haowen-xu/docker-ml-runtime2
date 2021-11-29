@@ -19,7 +19,7 @@ jobs:
           - variant: cpu
             python-version: 3.8
           - variant: gpu
-            python-version: 3.6
+            python-version: 3.8
 
     steps:
       - uses: actions/checkout@v2
